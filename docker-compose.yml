@@ -7,6 +7,8 @@ services:
     ports:
       - "9000:9000"
     user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./app:/var/www/mini-order-api
     environment:
       APP_DB_USER: ${MYSQL_USER}
       APP_DB_PASSWORD: ${MYSQL_PASSWORD}
@@ -26,6 +28,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./app:/var/www/mini-order-api
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app

@@ -30,3 +30,17 @@ A sample project built with Symfony for creating orders via a REST API.
     ```bash
     docker compose up -d --build
     ```
+
+## Testing
+```bash
+docker compose exec app bin/phpunit
+```
+
+## Code Style
+This project follows the [PSR-12](https://www.php-fig.org/psr/psr-12/) coding standard.
+
+Code quality is checked using [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer):
+
+```bash
+docker compose exec app vendor/bin/phpcs --standard=PSR12 src migrations tests
+```
