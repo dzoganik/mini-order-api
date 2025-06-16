@@ -1,0 +1,63 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+    container_name: mini_order_app
+    ports:
+      - "9000:9000"
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      APP_DB_USER: ${MYSQL_USER}
+      APP_DB_PASSWORD: ${MYSQL_PASSWORD}
+      APP_DB_NAME: ${MYSQL_DATABASE}
+      APP_DB_SERVER_VERSION: '${DB_SERVER_VERSION}'
+    depends_on:
+      - db
+    networks:
+      - mini_order_network
+    extra_hosts:
+      - hostdocker.internal:host-gateway
+
+  nginx:
+    image: nginx:1.28.0-alpine
+    container_name: mini_order_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - mini_order_network
+
+  db:
+    image: mariadb:11.7.2
+    container_name: mini_order_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mini_order_network
+
+  adminer:
+    image: adminer
+    container_name: mini_order_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - mini_order_network
+
+networks:
+  mini_order_network:
+    driver: bridge
