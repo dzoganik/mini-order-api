@@ -27,8 +27,15 @@ A sample project built with Symfony for creating orders via a REST API.
     ```
 
 3.  **Run with Docker Compose**
+    
+    We'll add a short delay to ensure the database service is ready before we continue.
     ```bash
-    docker compose up -d --build
+    docker compose up -d --build && sleep 30
+    ```
+
+4.  **Run database migrations**
+    ```bash
+    docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
     ```
 
 ## API Endpoints
