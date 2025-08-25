@@ -45,12 +45,33 @@ A sample project built with Symfony for creating orders via a REST API.
 
 ## API Endpoints
 
+### Authentication (JWT)
+
+*   **POST `/api/login_check`** - Retrieves a JWT token.
+    *   **Request:**
+        ```bash
+        Host: localhost
+        Content-Type: application/json´
+        
+        {
+            "email": "user1@example.com",
+            "password":"password1"
+        }
+        ```
+    *   **Response:**
+        ```json
+        {
+            "token": "eyJ..."
+        }
+        ```
+
 ### Orders
 *   **POST `/api/orders`** - Creates a new order.
     *   **Request:**
         ```bash
         Host: localhost
         Content-Type: application/json
+        Authorization: Bearer eyJ...
 
         {
             "customer_email": "user@example.com",
@@ -78,6 +99,9 @@ A sample project built with Symfony for creating orders via a REST API.
 *   **GET `/api/orders/{id}`** - Retrieve an Order by ID.
     *   **Query Parameters:**
         *   `page` (integer, optional, default: `1`) - The page number you want to display. Must be a positive integer.
+    
+    *   **Auth required:** Yes
+        *   **Header:** `Authorization: Bearer <JWT_TOKEN>`
 
     *   **Response:**
         ```json
@@ -132,6 +156,9 @@ A sample project built with Symfony for creating orders via a REST API.
         ```
 
 *   **GET `/api/orders`** - Retrieves a paginated list of all orders, sorted from newest to oldest.
+    *   **Auth required:** Yes
+        *   **Header:** `Authorization: Bearer <JWT_TOKEN>`
+
     *   **Response:**
         ```json
         {
