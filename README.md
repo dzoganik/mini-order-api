@@ -63,6 +63,30 @@ A sample project built with Symfony for creating orders via a REST API.
         }
         ```
 
+*   **GET `/api/orders/{id}`** - Retrieve an Order by ID.
+    *   **Response:**
+        ```json
+        {
+            "id": 1,
+            "customerEmail": "user@example.com",
+            "status": "NEW",
+            "totalPrice": 85.5,
+            "createdAt": "2025-08-25T03:19:16+00:00",
+            "orderItems": [
+                {
+                    "productName": "Keyboard",
+                    "quantity": 1,
+                    "unitPrice": 45.5
+                },
+                {
+                    "productName": "Mouse",
+                    "quantity": 2,
+                    "unitPrice": 20
+                }
+            ]
+        }
+        ```
+
 ## Testing
 ```bash
 docker compose exec app bin/phpunit

@@ -34,4 +34,29 @@ class OrderController extends AbstractController
             Response::HTTP_CREATED
         );
     }
+
+    #[Route('/orders/{id}', name: 'api_order_get_one', methods: ['GET'])]
+    public function getOrderById(int $id): JsonResponse
+    {
+        $order = $this->orderService->findOrderById($id);
+
+        if ($order === null) {
+            return $this->json(
+                [
+                    'error' => [
+                        'code' => Response::HTTP_NOT_FOUND,
+                        'message' => "Order with ID {$id} not found.",
+                    ]
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return $this->json(
+            $order,
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['order:read']]
+        );
+    }
 }

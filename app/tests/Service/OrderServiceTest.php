@@ -9,6 +9,7 @@ use App\Dto\CreateOrderItemDto;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Enum\OrderStatus;
+use App\Repository\OrderRepository;
 use App\Service\OrderService;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -105,7 +106,8 @@ class OrderServiceTest extends TestCase
 
         $service = new OrderService(
             $entityManagerMock,
-            new MockClock($now)
+            new MockClock($now),
+            $this->createMock(OrderRepository::class)
         );
 
         $order = $service->createOrder($orderDto);

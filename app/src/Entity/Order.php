@@ -20,22 +20,27 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['order:read'])]
     private int $id;
 
     #[ORM\Column]
+    #[Groups(['order:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
     private string $customerEmail;
 
     #[ORM\Column(enumType: OrderStatus::class)]
+    #[Groups(['order:read'])]
     #[Assert\NotBlank]
     private OrderStatus $status;
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    #[Groups(['order:read'])]
     #[Assert\PositiveOrZero]
     private float $totalPrice;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['order:read'])]
     private DateTimeImmutable $createdAt;
 
     /**
@@ -47,6 +52,7 @@ class Order
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups(['order:read'])]
     #[Assert\Valid]
     #[Assert\Count(min: 1)]
     private Collection $orderItems;

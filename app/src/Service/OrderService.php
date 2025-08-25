@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Dto\CreateOrderDto;
 use App\Entity\Order;
 use App\Entity\OrderItem;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Clock\ClockInterface;
 
@@ -14,7 +15,8 @@ class OrderService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly ClockInterface $clock
+        private readonly ClockInterface $clock,
+        private readonly OrderRepository $orderRepository
     ) {
     }
 
@@ -39,5 +41,10 @@ class OrderService
         $this->entityManager->flush();
 
         return $order;
+    }
+
+    public function findOrderById(int $id): ?Order
+    {
+        return $this->orderRepository->find($id);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -22,15 +23,18 @@ class OrderItem
     private Order $order;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     #[Assert\NotBlank]
     private string $productName;
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups(['order:read'])]
     #[Assert\NotBlank]
     #[Assert\Positive]
     private int $quantity;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['order:read'])]
     #[Assert\NotBlank]
     #[Assert\PositiveOrZero]
     private float $unitPrice;
