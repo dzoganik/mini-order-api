@@ -8,6 +8,7 @@ use App\Dto\CreateOrderDto;
 use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,6 +58,46 @@ class OrderController extends AbstractController
             Response::HTTP_OK,
             [],
             ['groups' => ['order:read']]
+        );
+    }
+
+    #[Route('/orders', name: 'api_order_get_all', methods: ['GET'])]
+    public function getAllOrders(
+        Request $request,
+        OrderService $orderService
+    ): JsonResponse {
+        $page = $request->query->getInt('page', 1);
+
+        if ($page < 1) {
+            $errorPayload = [
+                'error' => [
+                    'code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'The "page" query parameter must be a positive integer greater than zero.'
+                ]
+            ];
+
+            return $this->json($errorPayload, Response::HTTP_BAD_REQUEST);
+        }
+
+        $paginator = $orderService->getOrdersByPage($page);
+        $totalItems = count($paginator);
+        $pagesCount = (int) ceil($totalItems / $this->getParameter('app.paginator_per_page'));
+
+        $responseData = [
+            'data' => iterator_to_array($paginator->getIterator()),
+            'meta' => [
+                'total_items' => $totalItems,
+                'items_per_page' => $this->getParameter('app.paginator_per_page'),
+                'current_page' => $page,
+                'total_pages' => $pagesCount,
+            ]
+        ];
+
+        return $this->json(
+            $responseData,
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'order:read']
         );
     }
 }

@@ -64,6 +64,62 @@ A sample project built with Symfony for creating orders via a REST API.
         ```
 
 *   **GET `/api/orders/{id}`** - Retrieve an Order by ID.
+    *   **Query Parameters:**
+        *   `page` (integer, optional, default: `1`) - The page number you want to display. Must be a positive integer.
+
+    *   **Response:**
+        ```json
+        {
+            "data": [
+                {
+                    "id": 5,
+                    "customerEmail": "user@example.com",
+                    "status": "NEW",
+                    "totalPrice": 85.5,
+                    "createdAt": "2025-08-25T06:51:59+00:00",
+                    "orderItems": [
+                        {
+                            "productName": "Keyboard",
+                            "quantity": 1,
+                            "unitPrice": 45.5
+                        },
+                        {
+                            "productName": "Mouse",
+                            "quantity": 2,
+                            "unitPrice": 20
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "customerEmail": "user@example.com",
+                    "status": "NEW",
+                    "totalPrice": 85.5,
+                    "createdAt": "2025-08-25T06:51:58+00:00",
+                    "orderItems": [
+                        {
+                            "productName": "Keyboard",
+                            "quantity": 1,
+                            "unitPrice": 45.5
+                        },
+                        {
+                            "productName": "Mouse",
+                            "quantity": 2,
+                            "unitPrice": 20
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "total_items": 2,
+                "items_per_page": 10,
+                "current_page": 1,
+                "total_pages": 1
+            }
+        }
+        ```
+
+*   **GET `/api/orders`** - Retrieves a paginated list of all orders, sorted from newest to oldest.
     *   **Response:**
         ```json
         {

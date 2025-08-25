@@ -9,6 +9,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Clock\ClockInterface;
 
 class OrderService
@@ -46,5 +47,10 @@ class OrderService
     public function findOrderById(int $id): ?Order
     {
         return $this->orderRepository->find($id);
+    }
+
+    public function getOrdersByPage(int $page): Paginator
+    {
+        return $this->orderRepository->findByNewestPaginated($page);
     }
 }
