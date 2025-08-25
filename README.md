@@ -31,6 +31,38 @@ A sample project built with Symfony for creating orders via a REST API.
     docker compose up -d --build
     ```
 
+## API Endpoints
+
+### Orders
+*   **POST `/api/orders`** - Creates a new order.
+    *   **Request:**
+        ```bash
+        Host: localhost
+        Content-Type: application/json
+
+        {
+            "customer_email": "user@example.com",
+            "items": [
+                {
+                    "product_name": "Keyboard",
+                    "unit_price": 45.50, "quantity": 1
+                },
+                {
+                    "product_name": "Mouse",
+                     "unit_price": 20.00,
+                     "quantity": 2
+                }
+            ]
+        }
+        ```
+    *   **Response:**
+        ```json
+        {
+            "order ID": 1,
+            "status": "NEW"
+        }
+        ```
+
 ## Testing
 ```bash
 docker compose exec app bin/phpunit
